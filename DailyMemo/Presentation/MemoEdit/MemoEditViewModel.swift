@@ -2,7 +2,7 @@ import Foundation
 import Observation
 import SwiftData
 
-/// 메모 작성/수정 화면의 상태와 비즘니스 로직을 담당하는 ViewModel
+/// 메모 작성/수정 화면의 상태와 비즈니스 로직을 담당하는 ViewModel
 @Observable
 @MainActor
 final class MemoEditViewModel {
