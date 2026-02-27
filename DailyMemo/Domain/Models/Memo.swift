@@ -58,3 +58,4 @@ final class Memo {
         MemoColor(rawValue: colorHex) ?? .yellow
     }
 }
+
