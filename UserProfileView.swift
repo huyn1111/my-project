@@ -29,7 +29,11 @@ final class UserProfileViewModel: ObservableObject {
         defer { isLoading = false }
 
         // 실제 데이터 소스로 교체하세요
-        try? await Task.sleep(for: .seconds(1))
+        do {
+            try await Task.sleep(for: .seconds(1))
+        } catch {
+            return
+        }
         profile = UserProfile(
             name: "홍길동",
             email: "hong@example.com",
@@ -78,8 +82,8 @@ struct UserProfileView: View {
                 Spacer()
             }
             .padding(.vertical, 8)
+            .listRowBackground(Color.clear)
         }
-        .listRowBackground(Color.clear)
     }
 
     private var infoSection: some View {
@@ -108,6 +112,7 @@ private struct ProfileImageView: View {
             } else {
                 Image(systemName: "person.circle.fill")
                     .resizable()
+                    .scaledToFit()
                     .foregroundStyle(.secondary)
             }
         }
