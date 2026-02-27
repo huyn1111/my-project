@@ -21,17 +21,17 @@ struct MemoListViewModelTests {
     // MARK: - 초기 상태
 
     @Test("초기 searchQuery 가 빈 문자열")
-    func init_searchQuery() {
+    func 초기_searchQuery가빈문자열() {
         #expect(sut.searchQuery == "")
     }
 
     @Test("초기 selectedColorFilter 가 nil")
-    func init_selectedColorFilter() {
+    func 초기_selectedColorFilter가nil() {
         #expect(sut.selectedColorFilter == nil)
     }
 
     @Test("초기 Sheet 상태 — isAddingMemo false, editingMemo nil")
-    func init_sheetState() {
+    func 초기_Sheet상태가모두비활성() {
         #expect(sut.isAddingMemo == false)
         #expect(sut.editingMemo == nil)
     }
@@ -39,25 +39,25 @@ struct MemoListViewModelTests {
     // MARK: - filteredMemos — 검색어
 
     @Test("검색어 없으면 전체 메모 반환")
-    func filteredMemos_noQuery_returnsAll() {
+    func filteredMemos_검색어없으면전체반환() {
         let memos = makeMemos(["A", "B", "C"])
         #expect(sut.filteredMemos(memos).count == 3)
     }
 
     @Test("빈 배열 입력 시 빈 배열 반환")
-    func filteredMemos_emptyInput_returnsEmpty() {
+    func filteredMemos_빈배열입력시빈배열반환() {
         #expect(sut.filteredMemos([]).isEmpty)
     }
 
     @Test("제목으로 검색하면 일치하는 메모만 반환")
-    func filteredMemos_titleSearch() {
+    func filteredMemos_제목검색() {
         let memos = makeMemos(["사과 주스", "바나나", "사과 케이크"])
         sut.searchQuery = "사과"
         #expect(sut.filteredMemos(memos).count == 2)
     }
 
     @Test("본문으로 검색하면 일치하는 메모만 반환")
-    func filteredMemos_contentSearch() {
+    func filteredMemos_본문검색() {
         let a = Memo(title: "제목1", content: "맑은 날씨")
         let b = Memo(title: "제목2", content: "비가 온다")
         sut.searchQuery = "맑은"
@@ -67,21 +67,21 @@ struct MemoListViewModelTests {
     }
 
     @Test("검색은 대소문자를 무시한다")
-    func filteredMemos_caseInsensitive() {
+    func filteredMemos_대소문자무시() {
         let memos = [Memo(title: "Hello World")]
         sut.searchQuery = "hello"
         #expect(sut.filteredMemos(memos).count == 1)
     }
 
     @Test("검색 결과 없으면 빈 배열 반환")
-    func filteredMemos_noResults_returnsEmpty() {
+    func filteredMemos_결과없으면빈배열() {
         let memos = makeMemos(["사과", "바나나"])
         sut.searchQuery = "포도"
         #expect(sut.filteredMemos(memos).isEmpty)
     }
 
     @Test("공백만 있는 검색어는 전체 반환")
-    func filteredMemos_whitespaceQuery_returnsAll() {
+    func filteredMemos_공백검색어는전체반환() {
         let memos = makeMemos(["A", "B"])
         sut.searchQuery = "   "
         #expect(sut.filteredMemos(memos).count == 2)
@@ -90,7 +90,7 @@ struct MemoListViewModelTests {
     // MARK: - filteredMemos — 색상 필터
 
     @Test("색상 필터 적용 시 해당 색상 메모만 반환")
-    func filteredMemos_colorFilter_returnsMatching() {
+    func filteredMemos_색상필터적용() {
         let memos = [
             Memo(title: "노랑", colorHex: MemoColor.yellow.rawValue),
             Memo(title: "분홍", colorHex: MemoColor.pink.rawValue),
@@ -103,7 +103,7 @@ struct MemoListViewModelTests {
     }
 
     @Test("색상 필터 nil 이면 전체 메모 반환")
-    func filteredMemos_nilColorFilter_returnsAll() {
+    func filteredMemos_색상필터nil이면전체반환() {
         let memos = [
             Memo(title: "A", colorHex: MemoColor.yellow.rawValue),
             Memo(title: "B", colorHex: MemoColor.green.rawValue),
@@ -113,7 +113,7 @@ struct MemoListViewModelTests {
     }
 
     @Test("검색어 + 색상 필터 동시 적용")
-    func filteredMemos_combinedFilters() {
+    func filteredMemos_검색어와색상필터복합() {
         let memos = [
             Memo(title: "노랑 메모",  colorHex: MemoColor.yellow.rawValue),
             Memo(title: "파랑 메모",  colorHex: MemoColor.blue.rawValue),
@@ -129,27 +129,27 @@ struct MemoListViewModelTests {
     // MARK: - toggleColorFilter
 
     @Test("색상 선택 시 selectedColorFilter 에 설정됨")
-    func toggleColorFilter_setsColor() {
+    func toggleColorFilter_색상선택() {
         sut.toggleColorFilter(.blue)
         #expect(sut.selectedColorFilter == .blue)
     }
 
     @Test("선택된 색상 재탭 시 nil 로 해제됨")
-    func toggleColorFilter_retap_setsNil() {
+    func toggleColorFilter_재탭시nil로해제() {
         sut.toggleColorFilter(.blue)
         sut.toggleColorFilter(.blue)
         #expect(sut.selectedColorFilter == nil)
     }
 
     @Test("다른 색상 탭 시 새 색상으로 변경됨")
-    func toggleColorFilter_differentColor_changes() {
+    func toggleColorFilter_다른색상으로변경() {
         sut.toggleColorFilter(.blue)
         sut.toggleColorFilter(.green)
         #expect(sut.selectedColorFilter == .green)
     }
 
     @Test("MemoColor 전체 케이스 순차 선택 가능")
-    func toggleColorFilter_allCases() {
+    func toggleColorFilter_모든색상케이스선택가능() {
         for color in MemoColor.allCases {
             sut.selectedColorFilter = nil
             sut.toggleColorFilter(color)
@@ -160,7 +160,7 @@ struct MemoListViewModelTests {
     // MARK: - deleteMemo
 
     @Test("deleteMemo 호출 후 해당 메모가 fetch 결과에서 사라짐")
-    func deleteMemo_removesFromContext() throws {
+    func deleteMemo_삭제후메모가사라짐() throws {
         let memo = Memo(title: "삭제 대상")
         context.insert(memo)
         try context.save()
@@ -172,7 +172,7 @@ struct MemoListViewModelTests {
     }
 
     @Test("deleteMemo 는 지정한 메모만 삭제하고 나머지는 유지됨")
-    func deleteMemo_keepsOthers() throws {
+    func deleteMemo_지정메모만삭제() throws {
         let target = Memo(title: "삭제")
         let other  = Memo(title: "유지")
         context.insert(target)
@@ -187,7 +187,7 @@ struct MemoListViewModelTests {
     }
 
     @Test("여러 메모 중 특정 메모만 삭제됨")
-    func deleteMemo_specificAmongMany() throws {
+    func deleteMemo_여러건중특정메모삭제() throws {
         let memos = (1...3).map { Memo(title: "메모 \($0)") }
         memos.forEach { context.insert($0) }
         try context.save()
