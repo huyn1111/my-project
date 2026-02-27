@@ -27,32 +27,58 @@ Claude Code가 이 프로젝트에서 작업할 때 참조하는 가이드입니
 
 ## 디렉토리 구조
 
-```
 DailyMemo/
-├── DailyMemoApp.swift
-├── Domain/Models/Memo.swift
+├── App/
+│   └── DailyMemoApp.swift
+├── Domain/
+│   ├── Models/
+│   │   ├── Memo.swift
+│   │   └── Category.swift
+│   └── UseCases/
+│       ├── MemoUseCaseProtocol.swift
+│       └── MemoUseCase.swift
+├── Data/
+│   └── Repositories/
+│       ├── MemoRepositoryProtocol.swift
+│       └── MemoRepository.swift
 ├── Presentation/
 │   ├── MemoList/
+│   │   ├── MemoListView.swift
+│   │   └── MemoListViewModel.swift
 │   ├── MemoEdit/
-│   ├── Extensions/Color+Hex.swift
+│   │   ├── MemoEditView.swift
+│   │   └── MemoEditViewModel.swift
 │   └── Components/
-└── DailyMemoTests/
-```
+└── Resources/
+    └── Assets.xcassets
+
+---
+
+## 아키텍처 규칙
+
+레이어 의존성: Presentation → Domain ← Data
+
+- Presentation: ViewModel은 UseCase 프로토콜에만 의존
+- Domain: 순수 Swift — UIKit·SwiftUI·SwiftData import 없음
+- Data: Repository가 SwiftData ModelContext를 소유
+- @Observable 매크로 사용 (iOS 17+)
+- @MainActor 명시 필수
 
 ---
 
 ## 코딩 컨벤션
 
-| 규칙 | 세부 사항 |
-|------|----------|
-| 문서 주석 | 모든 `public` / `internal` API에 `///` 필수 |
-| 강제 언래핑 | `!` 사용 금지 |
-| print 디버깅 | 커밋에 `print()` 포함 금지 |
-| 브랜치 | `main`에 직접 커밋 금지 |
+- 모든 public/internal API에 /// 필수
+- 강제 언래핑(!) 사용 금지
+- 커밋에 print() 포함 금지
+- main 브랜치 직접 커밋 금지
+- Domain 레이어에서 SwiftUI·SwiftData import 금지
+- ModelContext는 Environment로 주입, 직접 생성 금지
 
-## DO NOT
-- `main` 브랜치에 직접 커밋하지 않는다
-- 강제 언래핑(`!`) 사용하지 않는다
-- `print()` 를 커밋에 포함하지 않는다
-- ViewModel에서 SwiftData `@Query` 를 사용하지 않는다
-- Domain 레이어에서 SwiftUI를 import하지 않는다
+---
+
+## 빌드 & 테스트
+
+swift build
+swift test
+swiftlint
