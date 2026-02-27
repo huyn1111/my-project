@@ -10,6 +10,26 @@ struct UserProfile {
     var profileImageName: String?
 }
 
+// MARK: - Use Case Protocol
+
+/// 프로필 데이터를 가져오는 UseCase 프로토콜
+protocol UserProfileUseCaseProtocol {
+    func fetchProfile() async throws -> UserProfile
+}
+
+/// 기본 UseCase 구현체
+final class DefaultUserProfileUseCase: UserProfileUseCaseProtocol {
+    func fetchProfile() async throws -> UserProfile {
+        try await Task.sleep(for: .seconds(1))
+        return UserProfile(
+            name: "홍길동",
+            email: "hong@example.com",
+            phone: "010-1234-5678",
+            profileImageName: nil
+        )
+    }
+}
+
 // MARK: - ViewModel
 
 /// 사용자 프로필 화면의 비즈니스 로직을 담당하는 ViewModel
@@ -19,8 +39,11 @@ final class UserProfileViewModel: ObservableObject {
     @Published private(set) var isLoading: Bool = false
     @Published var errorMessage: String?
 
-    init() {
+    private let useCase: UserProfileUseCaseProtocol
+
+    init(useCase: UserProfileUseCaseProtocol = DefaultUserProfileUseCase()) {
         self.profile = UserProfile(name: "", email: "", phone: "")
+        self.useCase = useCase
     }
 
     /// 프로필 데이터를 불러옵니다.
@@ -28,18 +51,13 @@ final class UserProfileViewModel: ObservableObject {
         isLoading = true
         defer { isLoading = false }
 
-        // 실제 데이터 소스로 교체하세요
         do {
-            try await Task.sleep(for: .seconds(1))
-        } catch {
+            profile = try await useCase.fetchProfile()
+        } catch is CancellationError {
             return
+        } catch {
+            errorMessage = error.localizedDescription
         }
-        profile = UserProfile(
-            name: "홍길동",
-            email: "hong@example.com",
-            phone: "010-1234-5678",
-            profileImageName: nil
-        )
     }
 }
 
