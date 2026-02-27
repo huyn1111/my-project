@@ -113,7 +113,7 @@ struct MemoListView: View {
                 description: Text(
                     isFiltering
                         ? "검색어나 필터를 변경해보세요."
-                        : "+ 버튼을 눐러 첫 번째 메모를 작성해보세요."
+                        : "+ 버튼을 눌러 첫 번째 메모를 작성해보세요."
                 )
             )
         }

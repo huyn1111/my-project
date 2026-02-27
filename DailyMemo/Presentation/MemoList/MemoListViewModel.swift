@@ -2,7 +2,7 @@ import Foundation
 import Observation
 import SwiftData
 
-/// 메모 목록 화면의 상태와 비즘니스 로직을 담당하는 ViewModel
+/// 메모 목록 화면의 상태와 비즈니스 로직을 담당하는 ViewModel
 @Observable
 @MainActor
 final class MemoListViewModel {
@@ -18,7 +18,7 @@ final class MemoListViewModel {
 
     /// 새 메모 작성 Sheet 표시 여부
     var isAddingMemo: Bool = false
-    /// 수정할 메모 (nil이면 Sheet 닫힐)
+    /// 수정할 메모 (nil이면 Sheet 닫힘)
     var editingMemo: Memo?
 
     // MARK: - Filtering
